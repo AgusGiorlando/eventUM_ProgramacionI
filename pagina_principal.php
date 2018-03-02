@@ -33,7 +33,7 @@ if(!$_SESSION['email']){
                         <a href="#">Titulo 2</a>
                     </li>
                     <li>
-                        <a href="#">Titulo 3</a>
+                        <a href="perfil.php">Perfil</a>
                     </li>
                     <li>
                      <a href="cerrar_sesion.php">Cerrar Sesión</a>
