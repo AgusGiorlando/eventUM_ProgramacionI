@@ -1,48 +1,50 @@
-<html>
-    <head>
-       
-    </head>
-    <body>
-    
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
     <?php
 $servidor="localhost";
 $usuario="root";
 $contrasena="";
 $nombrebd="eventum";
-$nombre=$_POST['nombre'];
-$apellido=$_POST['apellido'];
-$email=$_POST['email'];
-$fecha=$_POST['fecha'];
-$contraseña=$_POST['contraseña'];
-$curriculum=$_POST['curriculum'];
-$foto= $_FILES["foto"];
+  
 
-    $conexion1 = new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
+    $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
+    $sq2="select id_usuario from usuarios WHERE email = '{$_SESSION['email']}';";
+    $ejecutar=$conn->prepare($sq2);
+    $ejecutar->execute();
     
-    $sql = "UPDATE usuarios SET nombre = :nombre, 
-            apellido = :apellido, 
-            email = :email,  
-            fecha_nacimiento = :fecha,  
-            foto = :foto,
-            curriculum = :curriculum,
-            contrase�a = :contraseña,
-WHERE id = :id";
-$stmt = $conexion1->prepare($sql);                                  
-$stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);       
-$stmt->bindParam(':apellido', $apellido, PDO::PARAM_STR);    
-$stmt->bindParam(':email', $email, PDO::PARAM_STR);       
-$stmt->bindParam(':fecha_nacimiento', $fecha, PDO::PARAM_STR);    
-$stmt->bindParam(':foto', $foto, PDO::PARAM_STR);       
-$stmt->bindParam(':curriculum', $curriculum, PDO::PARAM_STR);    
-$stmt->bindParam(':contrase�a', $contraseña, PDO::PARAM_STR);       
-$stmt->bindParam(':apellido', $apellido, PDO::PARAM_STR);    
+    while($id=$ejecutar->fetch(PDO::FETCH_ASSOC)) {   
+      
+        foreach ($id as $id_usuario2)  {   
+    $id_usuario=$id_usuario2;      
+            }
+        
+    }
 
+$sql = "UPDATE usuarios SET nombre='". $_POST['nombre'] ."', apellido='". $_POST['apellido'] ."', email='". $_POST['email'] ."', fecha_nacimiento='". $_POST['fecha'] ."', curriculum='". $_POST['curriculum'] ."',contrase�a='". $_POST['c_contraseña'] ."' WHERE id_usuario=".$id_usuario;
+$ejecucion = $conn->prepare($sql);
+$ejecucion->execute();
 
-$stmt->bindParam(':id', $id, PDO::PARAM_INT);   
-$stmt->execute(); 
- 
-header("Location: pagina_principal.php");
+$user=$_POST['email'];    
+$_SESSION['email']=$user;    
+header("Location: perfil.php");    
+        
     ?>
-               
-    </body>
+</body>
 </html>
+
+
+
+
+
+
+
