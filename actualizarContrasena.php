@@ -17,10 +17,10 @@ session_start();
        
     $conexion = new PDO("mysql:host=$servidor;dbname=$bd;charset=utf8","root","");
         
-    $sql = "UPDATE usuarios SET contraseña='". $_POST['contraseña'] ."' WHERE id_usuario=".$_POST['id'];
+    $sql = "UPDATE usuarios SET contraseña='". $_POST['contrasena'] ."' WHERE id_usuario=".$_POST['id'];
     $ejecucion = $conexion->prepare($sql);
     $ejecucion->execute();
-    
+
     $_SESSION['email']=$user;
     header("Location: inicio_de_sesion.html");    
         
