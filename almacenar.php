@@ -17,8 +17,7 @@ $email=$_POST['email'];
 $fecha=$_POST['fecha'];
 $password=$_POST['contraseña'];
 $curriculum=$_POST['curriculum'];
-$foto= $_FILES["archivo"];
-
+$foto= addslashes(file_get_contents($_FILES['archivo']['tmp_name']));
 
     $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
     

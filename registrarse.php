@@ -42,7 +42,7 @@
             <div class="text-center row">
                  
  <h2>Registrarse</h2>
- <form action="almacenar.php" method="post" name="nvaClave">
+ <form action="almacenar.php" method="post" name="nvaClave" enctype="multipart/form-data">
                 Nombre: <input type="text" name="nombre" class="form-control" placeholder="Ingresa tu nombre" required>
 		<div style="height: 10px;"></div>                   
 		Apellido: <input type="text" name="apellido" class="form-control" placeholder="Ingresa tu apellido" required>
@@ -51,7 +51,7 @@
 		<div style="height: 10px;"></div>		
 		Fecha de Nacimiento: <input type="date" name="fecha" class="form-control" placeholder="Ingresa tu fecha de nacimiento" required>
 		<div style="height: 10px;"></div>		
-                Foto: <input type="file" name="archivo" class="form-control" placeholder="Ingresa tu fecha de nacimiento" required>
+                Foto: <input type="file" name="archivo" class="form-control" placeholder="Ingresa tu Foto" required>
 		<div style="height: 10px;"></div>		
                 Contraseña: <input type="password" name="contraseña" class="form-control" placeholder="Ingresa tu contraseña" required>
 		<div style="height: 10px;"></div>		
