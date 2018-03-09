@@ -28,7 +28,6 @@
                 </div>
                 
             </div>
-            
         </div>
     </nav>
 <header>    
@@ -38,14 +37,16 @@
                Nueva Clave             
             </h1>
                <?php
-                if(isset($_GET['id'])){
+                require 'encriptado.php';
+                $id = desencriptar_AES($_GET['a'],$clave);
+                if(isset($id)){
                 ?>
                     <form action="actualizarContrasena.php" name="nvaClave"  method="POST">
                     Nueva contraseña: <input type="password" name="contrasena" class="form-control" placeholder="Ingresa tu Nueva contraseña" required>
 		            <div style="height: 10px;"></div>		
 		            Confirmar contraseña: <input type="password" name="c_contrasena" class="form-control" placeholder="Confirmacion contraseña" required> 
 		            <div style="height: 10px;"></div>
-		            <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+		            <input type="hidden" name="id" value="<?php echo $_GET['a'] ?>">
                     <button type="submit" class="btn btn-primary">Actualizar</button>
                     </form>
                 <?php

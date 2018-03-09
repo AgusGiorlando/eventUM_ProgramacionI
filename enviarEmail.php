@@ -24,27 +24,11 @@
 
     if(isset($usuario[0])){
         //GENERACION DE LINK
-        $link = "formularioClave.php?id=". $usuario[0]['id_usuario'];
-        echo '<a href="' . $link . '">Cambiar Contraseña</a>'; 
-    /*
+        require 'encriptado.php';
+        
+        $link = "formularioClave.php?a=". encriptar_AES($usuario[0]['id_usuario'],$clave);
+        echo '<a href="' . $link . '">Cambiar contraseña</a><br>'; 
         //EMAIL
-        //Parametros
-        $mensaje = "Linea 1\r\nLinea 2\r\nLinea3\r\n";
-        $asunto = "Prueba de recuperacion de clave";
-        $destino = "";
-    
-        //Cabeceras
-        $cabecera = "MIME-Version: 1.0\r\n";
-        $cabecera .= "Content-type: text/html; charset=iso-8859-1\r\n";
-        $cabecera .= "From: ";
-
-        //Envio
-        if(mail($destino,$asunto,$mensaje,$cabecera)){
-            echo "<h1>Mensaje enviado</h1>";
-        }else{
-            echo "<h1>Mensaje no enviado</h1>";
-        }
-    */
     }else{
         echo "Email no encontrado";
     }
