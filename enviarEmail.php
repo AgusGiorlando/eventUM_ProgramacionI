@@ -27,10 +27,33 @@
         require 'encriptado.php';
         
         $link = "formularioClave.php?a=". encriptar_AES($usuario[0]['id_usuario'],$clave);
-        echo '<a href="' . $link . '">Cambiar contraseña</a><br>'; 
         //EMAIL
+        try {
+            error_reporting(E_STRICT);
+            require_once('class.phpmailer.php');
+            include('class.smtp.php');
+                $body = $link;
+                $mail = new PHPMailer();
+                $mail->SMTPSecure = 'tls';
+                $mail->Username = "";// SMTP Usuario
+                $mail->Password = "";
+                $mail->AddAddress($_POST['email']);//Destinatario
+                $mail->FromName = "EventUM";
+                $mail->Subject = "Recuperacion de clave";
+                $mail->Body = $body;
+                $mail->Host = "smtp.gmail.com";
+                $mail->Port = 587;
+                $mail->IsSMTP();
+                $mail->SMTPAuth = true;
+                $mail->From = $mail->Username;
+                $mail->Send();
+            echo "<br>";
+            echo 'El Mensaje ha sido enviado';
+        } catch (phpmailerException $e) {
+            echo $e->errorMessage();//Mensaje de error si se produciera.
+        }
     }else{
-        echo "Email no encontrado";
+        echo "No se encontro la direccion de email";
     }
     ?>    
 </body>
