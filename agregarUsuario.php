@@ -20,15 +20,13 @@
     <div class="container">
             <div class="text-center row">  
         <?php
-            require 'encriptado.php';
-
             $servidor = "localhost";
             $bd = "eventum";
 
             $nombre=$_POST['nombre'];
             $apellido=$_POST['apellido'];
             $email=$_POST['email'];
-            $password = encriptar_AES($_POST['contraseña'],$clave);
+            $password = password_hash($_POST['contraseña'],PASSWORD_DEFAULT);
 
             $conexion = new PDO("mysql:host=$servidor;dbname=$bd;charset=utf8","root","");
     

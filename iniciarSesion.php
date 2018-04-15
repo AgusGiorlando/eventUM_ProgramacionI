@@ -26,27 +26,17 @@
             $bd = "eventum";    
             $conexion = new PDO("mysql:host=$servidor;dbname=$bd;charset=utf8","root","");
     
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-
-            $sql = "SELECT * FROM usuarios WHERE email = '".$email."'";
+            $sql = "SELECT * FROM usuarios WHERE email = '".$_POST['email']."'";
 
             $ejecucion = $conexion->prepare($sql);
             $ejecucion->execute();
             $usuario = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 
-            echo var_dump($usuario);
-            echo "<br>".desencriptar_AES($usuario[0]['contraseña'],$clave);
-            echo "<br>".$password;
-
             if(isset($usuario[0])){
-                if(desencriptar_AES($usuario[0]['contraseña'],$clave) == $password){
-                //session_start();
-                //$_SESSION['email']=$_POST['email'];
-                //header("Location: pagina_principal.php");    
-                ?>
-                <h1>Sesion iniciada</h1><br>
-                <?php
+                if(password_verify($_POST['password'],$usuario[0]['contraseña'])){
+                    session_start();
+                    $_SESSION['email']=$_POST['email'];
+                    header("Location: pagina_principal.php");
                 }else{   
                     ?>      
                     <h1>ERROR</h1><br>
