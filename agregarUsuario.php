@@ -19,7 +19,6 @@
     <header>
     <div class="container">
             <div class="text-center row">  
-
         <?php
             require 'encriptado.php';
 

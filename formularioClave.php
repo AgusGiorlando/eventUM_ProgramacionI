@@ -4,21 +4,7 @@
     <title>EventUM</title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    <script>
-    function comprobarClave(){
-        clave1 = document.nvaClave.contrasena.value
-        clave2 = document.nvaClave.c_contrasena.value
-
-        if (clave1 == clave2)
-            document.nvaClave.submit()
-            alert("verd")
-            return true
-        else
-            alert("Las contraseñas no coinciden")
-            document.nvaClave.reset()
-            return false
-        } 
-    </script>
+    <script language = "javascript" src="js/validacion.js"></script>
 </head>
     <nav>
         <div class="container">
@@ -41,7 +27,7 @@
                 $id = desencriptar_AES($_GET['a'],$clave);
                 if(isset($id)){
                 ?>
-                    <form action="actualizarContrasena.php" name="nvaClave"  method="POST">
+                    <form action="actualizarContrasena.php" onSubmit="return validar();" name="nvaClave"  method="POST">
                     Nueva contraseña: <input type="password" name="contrasena" class="form-control" placeholder="Ingresa tu Nueva contraseña" required>
 		            <div style="height: 10px;"></div>		
 		            Confirmar contraseña: <input type="password" name="c_contrasena" class="form-control" placeholder="Confirmacion contraseña" required> 

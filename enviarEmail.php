@@ -8,8 +8,6 @@
 </head>
 <body>
     <?php
-    //echo $_POST['email'];
-
     //VERIFICACION DE USUARIO
     $servidor = "localhost";
     $bd = "eventum";

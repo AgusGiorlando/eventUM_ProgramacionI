@@ -11,7 +11,6 @@ session_start();
 </head>
 <body>
     <?php
-
     //CAMBIO DE CONTRASEÑA
     require 'encriptado.php';
 
@@ -25,7 +24,23 @@ session_start();
     $ejecucion->execute();
 
     $_SESSION['email']=$user;
-    header("Location: inicio_de_sesion.html");         
     ?>
+    <h2>Contraseña actualizada con exito</h2><br>
+    <div class="we-do">
+        <div class="container">
+            <div class="text-center row">
+                <a  class="btn" href="inicio_de_sesion.html">Iniciar sesion</a>
+            </div>
+        </div>
+    </div>     
+    <footer>
+        <div class="container">
+            <div class="text-center row">
+                Gracias por visitar la pagina
+                <br>   
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
