@@ -1,48 +1,136 @@
-<html>
-    <head>
-       
-    </head>
-    <body>
+<?php
+session_start();
+function mostrar($mostrar)  {
+
+$servidor="localhost";
+$usuario="root";
+$contrasena="";
+$nombrebd="eventum";
+
+    $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
+    $sql="select $mostrar from usuarios WHERE email = '{$_SESSION['email']}';";
+    $ejecutar=$conn->prepare($sql);
+    $ejecutar->execute();
     
+    while($fila=$ejecutar->fetch(PDO::FETCH_ASSOC)) {   
+      
+        foreach ($fila as $campo)  {   
+            return $campo;
+            }
+        
+    }
+                    }
+
+?>
+<?php
+function mostrarimagen(){
+$servidor="localhost";
+$usuario="root";
+$contrasena="";
+$nombrebd="eventum";
+
+$conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+$sql="select foto from usuarios WHERE email = '{$_SESSION['email']}';";
+$resultado=$conn->query($sql);
+while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
+       
+    return $fila['foto'];            
+?>         
+     <!--<img height="100px" src="data:imagen/jpg;base64,<?//php echo base64_encode($fila['foto']) ?>"/>-->
+     
+ <?php
+        }
+}
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
     <?php
 $servidor="localhost";
 $usuario="root";
 $contrasena="";
 $nombrebd="eventum";
-$nombre=$_POST['nombre'];
-$apellido=$_POST['apellido'];
-$email=$_POST['email'];
-$fecha=$_POST['fecha'];
-$contraseña=$_POST['contraseña'];
-$curriculum=$_POST['curriculum'];
-$foto= $_FILES["foto"];
+  
 
-    $conexion1 = new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
+    $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
+    $sq2="select id_usuario from usuarios WHERE email = '{$_SESSION['email']}';";
+    $ejecutar=$conn->prepare($sq2);
+    $ejecutar->execute();
     
-    $sql = "UPDATE usuarios SET nombre = :nombre, 
-            apellido = :apellido, 
-            email = :email,  
-            fecha_nacimiento = :fecha,  
-            foto = :foto,
-            curriculum = :curriculum,
-            contrase�a = :contraseña,
-WHERE id = :id";
-$stmt = $conexion1->prepare($sql);                                  
-$stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);       
-$stmt->bindParam(':apellido', $apellido, PDO::PARAM_STR);    
-$stmt->bindParam(':email', $email, PDO::PARAM_STR);       
-$stmt->bindParam(':fecha_nacimiento', $fecha, PDO::PARAM_STR);    
-$stmt->bindParam(':foto', $foto, PDO::PARAM_STR);       
-$stmt->bindParam(':curriculum', $curriculum, PDO::PARAM_STR);    
-$stmt->bindParam(':contrase�a', $contraseña, PDO::PARAM_STR);       
-$stmt->bindParam(':apellido', $apellido, PDO::PARAM_STR);    
+    while($id=$ejecutar->fetch(PDO::FETCH_ASSOC)) {   
+      
+        foreach ($id as $id_usuario2)  {   
+    $id_usuario=$id_usuario2;      
+            }
+        
+    }
+    
 
 
-$stmt->bindParam(':id', $id, PDO::PARAM_INT);   
-$stmt->execute(); 
- 
-header("Location: pagina_principal.php");
+
+
+    
+if($_FILES['archivo']['name']!=""){
+$foto= addslashes(file_get_contents($_FILES['archivo']['tmp_name'])); 
+$sq3 = "UPDATE usuarios SET foto='". $foto ."' WHERE id_usuario=".$id_usuario;
+$ejecucion = $conn->prepare($sq3);
+$ejecucion->execute();
+
+    //echo 'Lleno ';
+    
+}else{
+
+//   echo 'Vacio';
+    
+}
+    
+$comprobacion_cont=$_POST['contraseña'];
+
+if ($comprobacion_cont!="") {
+    
+$password=password_hash($_POST['contraseña'],PASSWORD_DEFAULT);
+    
+} else {
+    
+$password=mostrar("contrase�a");
+    
+}
+
+
+$comprobacion__curr=$_POST['curriculum'];
+    
+if ($comprobacion__curr!="") {
+$curriculum=$_POST['curriculum'];
+
+} else {
+
+$curriculum=mostrar("curriculum");
+}
+
+
+$sql = "UPDATE usuarios SET nombre='". $_POST['nombre'] ."', apellido='". $_POST['apellido'] ."', email='". $_POST['email'] ."', fecha_nacimiento='". $_POST['fecha'] ."', curriculum='". $curriculum ."',contrase�a='". $password ."' WHERE id_usuario=".$id_usuario;
+$ejecucion = $conn->prepare($sql);
+$ejecucion->execute();
+
+$user=$_POST['email'];    
+$_SESSION['email']=$user;    
+header("Location: perfil.php");    
+        
     ?>
-               
-    </body>
+</body>
 </html>
+
+
+
+
+
+
+

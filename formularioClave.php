@@ -4,7 +4,21 @@
     <title>EventUM</title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    <script language = "javascript" src="js/validacion.js"></script>
+           <script>
+        function comprobarClave(){
+        contraseña1 = document.nvaClave.contraseña.value
+        contraseña2 = document.nvaClave.c_contraseña.value
+        
+        if (contraseña1 == contraseña2)
+            document.nvaClave.submit()
+        else
+            alert("Las contraseñas no coinciden")
+            document.nvaClave.reset()
+        } 
+        
+    </script>
+
+
 </head>
     <nav>
         <div class="container">
@@ -27,14 +41,16 @@
                 $id = desencriptar_AES($_GET['a'],$clave);
                 if(isset($id)){
                 ?>
-                    <form action="actualizarContrasena.php" onSubmit="return validar();" name="nvaClave"  method="POST">
-                    Nueva contraseña: <input type="password" name="contrasena" class="form-control" placeholder="Ingresa tu Nueva contraseña" required>
+               <form action="actualizarContrasena.php" method="post" name="nvaClave" enctype="multipart/form-data">
+
+                            Nueva contraseña: <input type="password" name="contraseña" class="form-control" placeholder="Ingresa tu Nueva contraseña" required>
 		            <div style="height: 10px;"></div>		
-		            Confirmar contraseña: <input type="password" name="c_contrasena" class="form-control" placeholder="Confirmacion contraseña" required> 
+		            Confirmar contraseña: <input type="password" name="c_contraseña" class="form-control" placeholder="Confirmacion contraseña" required> 
 		            <div style="height: 10px;"></div>
 		            <input type="hidden" name="id" value="<?php echo $_GET['a'] ?>">
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary" onClick="comprobarClave()">Actualizar</button>
+
+               </form>
                 <?php
                 }else{
                     echo "Error de id de usuario";

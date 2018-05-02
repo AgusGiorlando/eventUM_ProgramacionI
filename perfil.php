@@ -37,11 +37,12 @@ while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
        
              
 ?>         
-     <img height="200px" src="data:imagen/jpg;base64,<?php echo base64_encode($fila['foto']) ?>"/>
+     <img height="100px" src="data:imagen/jpg;base64,<?php echo base64_encode($fila['foto']) ?>"/>
      
  <?php
         }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -75,7 +76,13 @@ while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
                 <div class="col-md-2">
                     <img class="img-responsive" src="img/logo.png" >
                 </div>
-                
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="pagina_principal.php">Pagina Principal</a>
+                    </li>
+                    
+                    
+                </ul>
             </div>
             
         </div>
@@ -88,22 +95,31 @@ while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
             <div class="text-center row">
                  
  <h2> Perfil </h2>
-                <form action="modificar.php" method="post" name="nvaClave">
-                    Nombre: <input type="text" name="nombre" value= '<?php mostrar("nombre"); ?>' class="form-control" placeholder="Ingresa tu nombre" required>
-		<div style="height: 10px;"></div>                   
-		Apellido: <input type="text" name="apellido" value= '<?php mostrar("apellido"); ?>' class="form-control" placeholder="Ingresa tu apellido" required>
+                
+               <?php mostrarimagen();?> 
+               <form action="modificar.php" method="post" name="nvaClave" enctype="multipart/form-data">
+                
+                <label for="texto" >Nombre: </label> 		
+                <input type="text" name="nombre" class="form-control" value="<?php mostrar("nombre"); ?>"> <br>
+                <label for="texto" >Apellido: </label> 		
+                <input type="text" name="apellido" class="form-control" value="<?php mostrar("apellido"); ?>"> <br>
+                <label for="texto" >E-mail: </label> 		
+                <input type="text" name="email" class="form-control" value="<?php mostrar("email"); ?>"> <br>
+                <label for="texto" >Fecha de Nacimiento: </label> 		
+                <input type="data" name="fecha" class="form-control" value="<?php mostrar("fecha_nacimiento"); ?>"> <br>
+                Foto: <input type="file" name="archivo" class="form-control" placeholder="Ingresa tu Foto" >
 		<div style="height: 10px;"></div>		
-		E-mail: <input type="text" name="email" value= '<?php mostrar("email"); ?>' class="form-control" placeholder="Ingresa tu E-imail" required>
+                
+                Nueva contraseña: <input type="password" name="contraseña" class="form-control" placeholder="********************" >
 		<div style="height: 10px;"></div>		
-		Fecha de Nacimiento: <input type="date" name="fecha" value= '<?php mostrar("fecha_nacimiento"); ?>' class="form-control" placeholder="Ingresa tu fecha de nacimiento" required>
-		<div style="height: 10px;"></div>		
-                Contraseña: <input type="password" name="contraseña" value= '<?php mostrar("contrase�a"); ?>' class="form-control" placeholder="Ingresa tu contraseña" required>
-		<div style="height: 10px;"></div>		
-		Confirmar contraseña: <input type="password" name="c_contraseña" value= '<?php mostrar("contrase�a"); ?>' class="form-control" placeholder="Confirmacion contraseña" required> 
+		Confirmar contraseña: <input type="password" name="c_contraseña" class="form-control" placeholder="********************" > 
 		<div style="height: 10px;"></div>
-		Curriculum: <textarea name="curriculum" rows="10" cols="40" value= '<?php mostrar("curriculum"); ?>' class="form-control" placeholder="Ingresar datos del Curriculum" required></textarea>
-                <div style="height: 10px;"></div>
-                <button type="submit" class="btn btn-primary" onClick="comprobarClave()">Modificar</button>
+		
+                
+                 		
+                <label for="texto" >Curriculum: </label> 		
+                <textarea name="curriculum" rows="10" cols="40" class="form-control" placeholder="<?php mostrar("curriculum"); ?>" required></textarea>   
+                <button type="submit" class="btn btn-primary" onClick="comprobarClave()">Actualizar</button>
                 
 </form>
                 
