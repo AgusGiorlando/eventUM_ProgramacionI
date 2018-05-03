@@ -100,14 +100,23 @@ if(!$_SESSION['email']){
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-sm-1"><h4>Presentador</h4></div>
+                    <div class="col-sm-1"><h4>Presentador</h4></div>
                         <div class="col-sm-1">
                             <div class="custom-control custom-checkbox">
-                                <input class="custom-control-input" type="checkbox" id="check_pres" unchecked onClick="habilitar('check_pres','pres');">
+                                <input class="custom-control-input" type="checkbox" id="check_pres" unchecke d onClick="habilitar('check_pres','n_pres');habilitar('check_pres','a_pres');">
                              </div>
                         </div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="pres" name="pres" disabled="disabled">
+                        <div class="col-sm-1">
+                            <h4>Nombre:</h4>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="n_pres" name="n_pres" disabled="disabled">
+                        </div>
+                        <div class="col-sm-1">
+                            <h4>Apellido:</h4>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="a_pres" name="a_pres" disabled="disabled">
                         </div>
                     </div>
                     <div class="container">
@@ -123,16 +132,32 @@ if(!$_SESSION['email']){
                                      
                     $conexion = new PDO("mysql:host=$servidor;port=3306;dbname=$bd;charset=utf8","root","");
 
-                    $sql = "SELECT titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE eventos.presentador = usuarios.id_usuario AND";
+                    $sql = "SELECT titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE 1 AND eventos.presentador = usuarios.id_usuario ";
 
                     if (isset($_POST['titulo'])) {
-                        $sql .= " titulo LIKE '%".$_POST['titulo']."%' ";
-                        echo $_POST['titulo'];
-                        if (isset($_POST['desc'])) {
-                            $sql .= "descripcion LIKE '%".$_POST['desc']."%' ";
-                            echo $_POST['desc'];
-                        }                        
+                        $sql .= "AND titulo LIKE '%".$_POST['titulo']."%' ";
                     }
+
+                    if (isset($_POST['desc'])) {
+                        $sql .= "AND descripcion LIKE '%".$_POST['desc']."%' ";
+                    }
+
+                    if (isset($_POST['fechai']) && isset($_POST['fechaf'])) {
+                        $sql .= "AND inicio BETWEEN '".$_POST['fechai']."' AND '".$_POST['fechaf']."'";
+                    }
+
+                    if (isset($_POST['precio'])) {
+                        $sql .= "AND precio LIKE '%".$_POST['precio']."%' ";
+                    }
+                    
+                    if (isset($_POST['n_pres'])) {
+                        $sql .= "AND usuarios.nombre LIKE '%".$_POST['n_pres']."%' ";
+                    }
+                                        
+                    if (isset($_POST['a_pres'])) {
+                        $sql .= "AND usuarios.apellido LIKE '%".$_POST['a_pres']."%' ";
+                    }
+                    
                     $sql .= ";";
                     $ejecucion = $conexion->prepare($sql);
                     $ejecucion->execute();
@@ -140,8 +165,6 @@ if(!$_SESSION['email']){
                     $eventos = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
                     $numEventos = $ejecucion->rowCount();
                     
-                    var_dump($eventos);
-
                     for ($i=0; $i < $numEventos; $i++) { 
                         
                 ?>
