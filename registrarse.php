@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<?php
+sesion_start();
+if(!$_SESSION['email']){
+    header("Location: inicio_de_sesion.html");
+}
+?>
 <html>
 <head>
     <title>EventUM</title>

@@ -1,8 +1,5 @@
 <?php
 session_start();
-?>
-<!DOCTYPE html>
-<?php
 if(!$_SESSION['email']){
     header("Location: inicio_de_sesion.html");
 }
