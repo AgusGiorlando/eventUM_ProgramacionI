@@ -3,6 +3,7 @@ session_start();
 if(!$_SESSION['email']){
     header("Location: inicio_de_sesion.html");
 }
+require 'encriptado.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -129,7 +130,7 @@ if(!$_SESSION['email']){
                                      
                     $conexion = new PDO("mysql:host=$servidor;port=3306;dbname=$bd;charset=utf8","root","");
 
-                    $sql = "SELECT titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE 1 AND eventos.presentador = usuarios.id_usuario ";
+                    $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE 1 AND eventos.presentador = usuarios.id_usuario ";
 
                     if (isset($_POST['titulo'])) {
                         $sql .= "AND titulo LIKE '%".$_POST['titulo']."%' ";
@@ -194,7 +195,7 @@ if(!$_SESSION['email']){
                             <h4 style="color:black" align="left"><?php echo $eventos[$i]['nombre']." ".$eventos[$i]['apellido'] ?></h4>
                         </div>
                         <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Leer mas</a>
+                            <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($eventos[$i]['id_evento'],$clave) ?>">Leer mas</a>
                         </div>
                         <div class="col-sm-4" style="background-color:white;">    
                             <a class="btn btn-primary" href="">Asistir</a>
