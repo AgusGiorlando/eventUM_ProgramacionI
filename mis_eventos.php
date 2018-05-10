@@ -30,7 +30,7 @@ if (!$_SESSION['email']) {
                         <a href="pagina_principal.php">P&aacute;gina Principal</a>
                     </li>
                     <li>
-                        <a href="#" style="background-color: red">Crear tu propio Evento</a>
+                        <a href="nuevo_evento.php" style="background-color: red">Crear tu propio Evento</a>
 
                     </li>
                     <li>

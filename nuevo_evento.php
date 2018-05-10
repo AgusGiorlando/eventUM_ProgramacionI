@@ -18,7 +18,7 @@ session_start();
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="pagina_pricipal.php">Página Principal</a>
+                        <a href="pagina_principal.php">Página Principal</a>
                     </li>
                     <li>
                         <a href="perfil.php">Perfil</a>
