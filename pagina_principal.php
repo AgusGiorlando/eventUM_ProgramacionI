@@ -76,7 +76,7 @@ if(!$_SESSION['email']){
                             <h5 style="color:black">Fecha: <?php echo $eventos[$i]['inicio'] ?></h5>
                         </div>
                         <div class="col-sm-8" style="background-color:white;">
-                            <h5 style="color:black">Duracion: <?php echo $eventos[$i]['duracion'] ?></h5>
+                            <h5 style="color:black">Duracion: <?php echo $eventos[$i]['duracion'] ?> minutos</h5>
                         </div>
                     </div>
                     <div class="panel-body" style="background-color:white;padding:10px">
