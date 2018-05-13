@@ -45,7 +45,7 @@ if($evento[0]['email'] == $_SESSION['email']){
         echo 'Futuro';
     }else{
         if($diffFin->format('%R') == '-'){
-        echo 'pasado';
+            header("Location: eventoPasAsistente.php?a=".$_GET['a']);        
         }else if($diffFin->format('%R') == '+'){
             echo 'En Proceso';
         }
