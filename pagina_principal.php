@@ -1,9 +1,36 @@
 <?php
+
 session_start();
 if(!$_SESSION['email']){
     header("Location: inicio_de_sesion.html");
-}
-?>
+
+  }
+
+  function mostrar($mostrar)  {
+
+$servidor="localhost";
+$usuario="root";
+$contrasena="";
+$nombrebd="eventum";
+
+    $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
+    $sql="select $mostrar from usuarios WHERE email = '{$_SESSION['email']}';";
+    $ejecutar=$conn->prepare($sql);
+    $ejecutar->execute();
+    
+    while($fila=$ejecutar->fetch(PDO::FETCH_ASSOC)) {   
+      
+        foreach ($fila as $campo)  {   
+            return $campo;
+            }
+        
+    }
+                    }
+
+  
+  
+  
+  ?>
 <!DOCTYPE html>
 <html >
 <head>
@@ -18,6 +45,13 @@ if(!$_SESSION['email']){
                     <img class="img-responsive" src="img/logo.png" >
                 </div>
                 <ul class="nav navbar-nav navbar-right">
+                    <?php 
+                   if(mostrar('admin')==1) {
+                    ?>
+                    <li><a href="administrador.php">Administrador</a></li> <!--Agregar link a mis eventos-->
+                   <?php 
+                   }
+                   ?>
                     <li><a href="mis_eventos.php">Mis eventos</a></li> <!--Agregar link a mis eventos-->
                     <li><a href="perfil.php">Modificar Perfil</a></li>
                     <li><a href="cerrar_sesion.php">Cerrar Sesión</a></li>
