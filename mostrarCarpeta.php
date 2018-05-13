@@ -23,4 +23,4 @@ function mostrarCarpeta($ruta){
         closedir($gestor);
         echo "</ul>";
 }
-        ?>
+?>

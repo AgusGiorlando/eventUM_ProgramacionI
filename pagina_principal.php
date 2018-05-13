@@ -89,7 +89,7 @@ $nombrebd="eventum";
                     if(isset($_POST['busqueda'])) {
                         $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE descripcion LIKE '%".$_POST['busqueda']."%' OR titulo LIKE '%".$_POST['busqueda']."%' AND inicio >= '".date('Y-m-d h:i:s', time())."' AND eventos.presentador = usuarios.id_usuario AND eventos.nulo != 1 ORDER BY inicio;";
                     }else{
-                        $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE inicio >= '".date('Y-m-d h:i:s', time())."' AND eventos.presentador = usuarios.id_usuario AND eventos.nulo != 1 ORDER BY inicio";
+                        $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE inicio >= '".date('Y-m-d h:i:s', time())."' AND eventos.presentador = usuarios.id_usuario  AND eventos.nulo != 1 ORDER BY inicio";
                     }
                     $ejecucion = $conexion->prepare($sql);
                     $ejecucion->execute();
