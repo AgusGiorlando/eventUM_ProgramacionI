@@ -1,11 +1,4 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>PRUEBA</title>
-    </head>
-    <body>
-        <pre>
-        <?php
+<?php
         /**
  * Funcion que muestra la estructura de carpetas a partir de la ruta dada.
  */
@@ -31,6 +24,3 @@ function mostrarCarpeta($ruta){
         echo "</ul>";
 }
         ?>
-        </pre>
-    </body>
-</html>
