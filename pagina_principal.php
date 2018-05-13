@@ -53,9 +53,9 @@ if(!$_SESSION['email']){
                     $conexion = new PDO("mysql:host=$servidor;port=3306;dbname=$bd;charset=utf8","root","");
                         
                     if(isset($_POST['busqueda'])) {
-                        $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE descripcion LIKE '%".$_POST['busqueda']."%' OR titulo LIKE '%".$_POST['busqueda']."%' AND inicio >= '".date('Y-m-d h:i:s', time())."' AND eventos.presentador = usuarios.id_usuario ORDER BY inicio ASC ;";
+                        $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE descripcion LIKE '%".$_POST['busqueda']."%' OR titulo LIKE '%".$_POST['busqueda']."%' AND inicio >= '".date('Y-m-d h:i:s', time())."' AND eventos.presentador = usuarios.id_usuario AND eventos.nulo != 1 ORDER BY inicio;";
                     }else{
-                        $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE inicio >= '".date('Y-m-d h:i:s', time())."' AND eventos.presentador = usuarios.id_usuario ORDER BY inicio ASC;";
+                        $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE inicio >= '".date('Y-m-d h:i:s', time())."' AND eventos.presentador = usuarios.id_usuario AND eventos.nulo != 1 ORDER BY inicio";
                     }
                     $ejecucion = $conexion->prepare($sql);
                     $ejecucion->execute();
@@ -95,7 +95,7 @@ if(!$_SESSION['email']){
                             <h4 style="color:black" align="left"><?php echo $eventos[$i]['nombre']." ".$eventos[$i]['apellido'] ?></h4>
                         </div>
                         <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($eventos[$i]['id_evento'],$clave) ?>" >Leer mas</a>
+                            <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($eventos[$i]['id_evento'],$clave) ?>" >Ver</a>
                         </div>
                         <div class="col-sm-4" style="background-color:white;">    
                             <a class="btn btn-primary" href="">Asistir</a>

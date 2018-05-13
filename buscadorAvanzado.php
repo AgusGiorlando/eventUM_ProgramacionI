@@ -156,7 +156,7 @@ require 'encriptado.php';
                         $sql .= "AND usuarios.apellido LIKE '%".$_POST['a_pres']."%' ";
                     }
                     
-                    $sql .= ";";
+                    $sql .= "AND eventos.nulo != 1 ORDER BY inicio;";
                     $ejecucion = $conexion->prepare($sql);
                     $ejecucion->execute();
                     
@@ -195,7 +195,7 @@ require 'encriptado.php';
                             <h4 style="color:black" align="left"><?php echo $eventos[$i]['nombre']." ".$eventos[$i]['apellido'] ?></h4>
                         </div>
                         <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($eventos[$i]['id_evento'],$clave) ?>">Leer mas</a>
+                            <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($eventos[$i]['id_evento'],$clave) ?>">Ver</a>
                         </div>
                         <div class="col-sm-4" style="background-color:white;">    
                             <a class="btn btn-primary" href="">Asistir</a>

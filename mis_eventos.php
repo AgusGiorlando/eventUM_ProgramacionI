@@ -5,8 +5,9 @@ session_start();
 <?php
 if (!$_SESSION['email']) {
     header("Location: inicio_de_sesion.html");
-    ;
+    
 }
+require 'encriptado.php';
 ?>
 <html >
 
@@ -75,7 +76,7 @@ if (!$_SESSION['email']) {
                 </h3>
                 <?php
                 $bdd = new PDO('mysql:host=localhost;dbname=eventum', 'root', '');
-                $respuesta = $bdd->query('SELECT * FROM eventos WHERE DAY(inicio) = DAY(NOW())');
+                $respuesta = $bdd->query('SELECT * FROM eventos WHERE DAY(inicio) = DAY(NOW()) AND eventos.nulo != 1 ORDER BY inicio');
                 if ($respuesta != NULL) {
                     while ($donnees = $respuesta->fetch()) {
                         ?>
@@ -90,10 +91,14 @@ if (!$_SESSION['email']) {
                         <div class="col-md-2"><?php echo '<p> Presentador: ' . $donnees['presentador'] . '</p>'; ?> </div>
                         <div class="col-md-2"><?php echo '<p> Archivo: ' . $donnees['archivo']; ?></div>
                         <div class="col-md-2"><?php echo '<p> Asistente: ' . $donnees['asistente'] . '</p>'; ?></div>
+                        <div class="col-sm-4" style="background-color:white;"> 
+                        
+                        <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($donnees['id_evento'],$clave) ?>">Ver</a>
+                                   
+                            
+                        </div>   
+                        
                         <br><br>
-                        <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Leer mas</a>
-                        </div>
                         <br>
                         <br>
                         <br> 
@@ -115,7 +120,7 @@ if (!$_SESSION['email']) {
                     Tus eventos en futuro :
                 </h3> 
                 <?php
-                $respuesta = $bdd->query('SELECT * FROM eventos WHERE inicio > NOW()');
+                $respuesta = $bdd->query('SELECT * FROM eventos WHERE inicio > NOW() AND eventos.nulo != 1 ORDER BY inicio');
                 if ($respuesta != NULL) {
                     while ($donnees = $respuesta->fetch()) {
                         ?>
@@ -131,9 +136,16 @@ if (!$_SESSION['email']) {
                         <div class="col-md-2"><?php echo '<p> Archivo: ' . $donnees['archivo']; ?></div>
                         <div class="col-md-2"><?php echo '<p> Asistente: ' . $donnees['asistente'] . '</p>'; ?></div>
                         <br><br>
-                        <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Leer mas</a>
-                        </div>
+                        
+                        
+                        <div class="col-sm-4" style="background-color:white;"> 
+                        
+                        <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($donnees['id_evento'],$clave) ?>">Ver</a>
+                                   
+                            
+                        </div>   
+                        
+                        
                         <br>
                         <br>
                         <br>
@@ -154,7 +166,7 @@ if (!$_SESSION['email']) {
                     Tus eventos pasados :
                 </h3>
                 <?php
-                $respuesta = $bdd->query('SELECT * FROM eventos WHERE DAY(inicio) < DAY(NOW())');
+                $respuesta = $bdd->query('SELECT * FROM eventos WHERE DAY(inicio) < DAY(NOW()) AND eventos.nulo != 1 ORDER BY inicio');
                 if ($respuesta != NULL) {
                     while ($donnees = $respuesta->fetch()) {
                         ?>
@@ -170,9 +182,12 @@ if (!$_SESSION['email']) {
                         <div class="col-md-2"><?php echo '<p> Archivo: ' . $donnees['archivo']; ?></div>
                         <div class="col-md-2"><?php echo '<p> Asistente: ' . $donnees['asistente'] . '</p>'; ?></div>
                         <br><br>
-                        <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Leer mas</a>
-                        </div>
+                        <div class="col-sm-4" style="background-color:white;"> 
+                        
+                        <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($donnees['id_evento'],$clave) ?>">Ver</a>
+                                   
+                            
+                        </div>   
                         <br>
                         <br>
                         <br>

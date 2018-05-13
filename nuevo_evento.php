@@ -61,17 +61,17 @@ session_start();
 						</div>
 						
 						<input type="text" name="ubicacion" class="form-control" placeholder="Ubicación">
-                        <div style="height: 10px;"></div>
-						<head>
-							<link rel="import" href="m1.php">
-						</head>
+                        <div style="height: 500px;">
+                        <?php include('m1.html'); ?>
+                        </div>
 						<input type="text" name="latitud" placeholder="Latitud">		
                         
 						<input type="text" name="longitud" placeholder="Longitud">
                         <div style="height: 10px;"></div>
 						
 						<br/></br><br/><br><input type="submit" class="btn btn-primary" value="Crear Evento">
-					</form>
+                    </form>
+                    <?php include('m1.html'); ?>
 				</p>            
             </div>
         </div>
