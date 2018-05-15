@@ -132,7 +132,7 @@ $nombrebd="eventum";
                             <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($eventos[$i]['id_evento'],$clave) ?>" >Ver</a>
                         </div>
                         <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Asistir</a>
+                            <a class="btn btn-primary" href="asistirEvento.php?a=<?php echo encriptar_AES($eventos[$i]['id_evento'],$clave) ?>">Asistir</a>
                         </div>
                     </div>
                 </div>
