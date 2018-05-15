@@ -1,26 +1,12 @@
-<?php
-        /**
- * Funcion que muestra la estructura de carpetas a partir de la ruta dada.
- */
-mostrarCarpeta(getcwd()."\docs");
-function mostrarCarpeta($ruta){
-    // Se comprueba que realmente sea la ruta de un directorio
-    if (is_dir($ruta)){
-        // Abre un gestor de directorios para la ruta indicada
-        $gestor = opendir($ruta);
-        echo "<ul>";
-        // Recorre todos los elementos del directorio
-        while (($archivo = readdir($gestor)) !== false)  {
-            $ruta_completa = $ruta . "/" . $archivo;
-            // Se muestran todos los archivos y carpetas excepto "." y ".."
-            if ($archivo != "." && $archivo != "..") {
-                // Si es un directorio se recorre recursivamente
-                    echo "<li>" . $archivo . "</li>";
-                }
-            }
-        }       
-        // Cierra el gestor de directorios
-        closedir($gestor);
-        echo "</ul>";
-}
+<?php 
+    $dir = opendir(getcwd()."\docs");   // Indica el patch de la carpeta donde esten los archivos
+    while ($file = readdir($dir)) {
+        if ( preg_match("(doc|pdf)",$file) ) {  // Ficheros a mostrar
+            $e1 = "$file";
+            $se = explode('.',$e1);  // Para que no me muestre la extension del archivo
+            echo "<strong>&raquo;</strong>  <a href=docs/"."$file>".$se[0].".".$se[1]."</a><br>";
+        }
+    }
+    closedir($dir);
 ?>
+

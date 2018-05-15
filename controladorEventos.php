@@ -17,8 +17,6 @@ $ejecucion->execute();
 
 $evento = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 
-//var_dump($evento);
-
 // REDIRECCION A VISTA
 
 $inicioDate = \DateTime::createFromFormat('Y-m-d H:i:s', $evento[0]['inicio']);
