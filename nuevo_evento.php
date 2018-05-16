@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 
 <html>
@@ -62,20 +59,6 @@ session_start();
 							<div style="height: 10px;"></div>
 						</div>
 						
-<<<<<<< HEAD
-						<input type="text" name="ubicacion" class="form-control" placeholder="Ubicación">
-                        <div style="height: 500px;">
-                        <?php include('m1.html'); ?>
-                        </div>
-						<input type="text" name="latitud" placeholder="Latitud">		
-                        
-						<input type="text" name="longitud" placeholder="Longitud">
-                        <div style="height: 10px;"></div>
-						
-						<br/></br><br/><br><input type="submit" class="btn btn-primary" value="Crear Evento">
-                    </form>
-                    <?php include('m1.html'); ?>
-=======
 						<div style="height: 500px" align="middle" > 
 							<input type="text" id="direccion" name="direccion" size="40" value="" placeholder="Direccion"/>
 							<input type="text" id="coordenadas" name="coordenadas" size="40" value="" placeholder="Coordenadas"/>
@@ -87,7 +70,6 @@ session_start();
 							
 						<input type="submit" class="btn btn-primary" value="Crear Evento">
 					</form>
->>>>>>> FLOR-Nuevo_Evento
 				</p>            
             </div>
         </div>
