@@ -12,15 +12,18 @@ session_start();
 		$fecha = $_POST['fecha'];
 		$duracion = $_POST['duracion'];
 		$descripcion = $_POST['descripcion'];
-		$ubicacion = $_POST['ubicacion'];
-		$_SESSION['ubicacion'] = $ubicacion;
-		$latitud = $_POST['latitud'];
-		$_SESSION['latitud'] = $latitud;
-		$longitud = $_POST['longitud'];
-		$_SESSION['longitud'] = $longitud;
 		$cupo = $_POST['cupo'];
 		$precio = $_POST['precio'];
+		$direccion = $_POST['direccion'];
+		$coordenadas = $_POST['coordenadas'];
 		
+		//echo $coordenadas;
+		//echo get_class($coordenadas);
+		
+		//echo $direccion;
+		//echo get_class($direccion);
+		
+		//Parte para guadar archivo en una carpeta local y guardar en la BD la ruta
 		foreach($_FILES['archivo']['tmp_name'] as $key => $tmp_name){
 			//Validamos que el archivo exista
 			if($_FILES['archivo']['name'][$key]){
@@ -68,8 +71,8 @@ session_start();
 			//echo $id_usuario;
 		}		
 		try{
-			$sql = "INSERT INTO eventos (titulo, inicio, duracion, descripcion, cupo_max, ubicacion, latitud, longitud, precio, presentador, archivo) 
-			VALUES (:titulo, :inicio, :duracion, :descripcion, :cupo_max, :ubicacion, :latitud, :longitud, :precio, :presentador, :archivo)";
+			$sql = "INSERT INTO eventos (titulo, inicio, duracion, descripcion, cupo_max, direccion, coordenadas, precio, presentador, archivo) 
+			VALUES (:titulo, :inicio, :duracion, :descripcion, :cupo_max, :direccion, :coordenadas, :precio, :presentador, :archivo)";
 			$stmt = $conexionPDO->prepare($sql);
 			if($stmt->execute(array(
 			':titulo' => $titulo, 
@@ -77,14 +80,13 @@ session_start();
 			':duracion' => $duracion,
 			':descripcion' => $descripcion, 
 			':cupo_max' => $cupo, 
-			':ubicacion' => $ubicacion,
-			':latitud' => $latitud, 
-			':longitud' => $longitud,
+			':direccion' => $direccion,
+			':coordenadas' => $coordenadas,
 			':precio' => $precio, 
 			':presentador' => $id_usuario,
 			':archivo' => $target_path))){
 				//echo "Se ha creado el nuevo registro!";
-				header("Location: mi_evento.php");
+				header("Location: mis_eventos.php");
 				die();
 			}
 		}catch(PDOException $e){
