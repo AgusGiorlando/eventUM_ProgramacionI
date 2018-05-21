@@ -1,15 +1,17 @@
-<?php
-session_start();
+<html>
+	<head>
+		<script async defer
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMtQv2rF0nW7vo-M2LmsXI68SxizTSBt8&callback=initMap">
+		</script>
+	</head>
+</html>
 
-$target_path = $_SESSION['target_path'];
+<?php
+include('mostrarCarpeta.php');
 
 function mostrar($mostrar){
 		
-	$servidor="localhost";
-	$usuario="root";
-	$contrasena="";
-	$nombrebd="eventum";
-	$conexionPDO = new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
+	include('conexionBD.php');
     
 	$sql="SELECT $mostrar FROM eventos ORDER BY id_evento DESC LIMIT 1";
     $ejecutar=$conexionPDO->prepare($sql);
@@ -31,12 +33,8 @@ function mostrar_arch($mostrar){
 		echo "NO SE CARGO";
 	}
 	
-	$servidor="localhost";
-	$usuario="root";
-	$contrasena="";
-	$nombrebd="eventum";
-	$conexionPDO = new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
-    
+	include('conexionBD.php');
+    	
 	$sql="SELECT $mostrar FROM eventos ORDER BY id_evento DESC LIMIT 1";
     $ejecutar=$conexionPDO->prepare($sql);
     $ejecutar->execute();
@@ -45,12 +43,29 @@ function mostrar_arch($mostrar){
 		echo "<a href='$target_path'> $filename </a>";	
 		echo "<br>";
 	}
-	$tipo = $_SESSION['tipo'];
-	if ((strpos($tipo, "png") || strpos($tipo, "jpeg"))) {
-		echo "<img src=$target_path border='0' width='300' height='300'>";
-	}
 }
 
+include ('conexionBD.php');
+$sql = 'SELECT coordenadas FROM eventos ORDER BY id_evento DESC LIMIT 1';
+$consulta = $conexionPDO->prepare($sql);
+$resultado = $consulta->execute();
+$rows = $consulta->fetchAll();
+foreach($rows as $registro){
+	$coordenadas = $registro[0];
+}
+					
+$porcion = explode(",", $coordenadas);
+$latitud = trim($porcion[0], '(');
+$longitud = trim ($porcion[1], ')');
+
+require 'encriptado.php';
+$servidor = "localhost";
+$bd = "eventum";                      
+$conexion = new PDO("mysql:host=$servidor;port=3306;dbname=$bd;charset=utf8","root","");
+$sql = "SELECT * FROM eventos, usuarios WHERE id_evento = '".desencriptar_AES($_GET['a'],$clave)."' AND eventos.presentador = usuarios.id_usuario;";
+$ejecucion = $conexion->prepare($sql);
+$ejecucion->execute();
+$evento = $ejecucion->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
@@ -58,9 +73,9 @@ function mostrar_arch($mostrar){
         <title>EventUM</title>
         <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
-    </head>
-
-    <nav>
+	</head>
+	
+	<nav>
         <div class="container">
             <div class="row">
                 <div class="col-md-2">
@@ -68,7 +83,7 @@ function mostrar_arch($mostrar){
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="pagina_pricipal.php">Página Principal</a>
+                        <a href="pagina_principal.php">Página Principal</a>
                     </li>
                     <li>
                         <a href="perfil.php">Perfil</a>
@@ -88,40 +103,38 @@ function mostrar_arch($mostrar){
                 </h1>
                 <p>
                     <form action="modificar_evento.php" method="POST" enctype="multipart/form-data">
-						<input type="text" name="titulo" class="form-control" placeholder="Titulo" value="<?php mostrar('titulo'); ?>" required>
+						<input type="text" name="titulo" class="form-control" placeholder="Titulo" value="<?php echo $evento[0]['titulo']; ?>" required>
                         <div style="height: 10px;"></div>                   
                         
-						<input type="datetime-local" name="fecha" class="control" placeholder="Fecha" value="<?php mostrar('inicio'); ?>" required>
+						<input type="datetime" name="fecha" class="control" placeholder="Fecha" value="<?php echo $evento[0]['inicio']; ?>" required>
                         
-						<input type="time" name="duracion" placeholder="Duración" value="<?php mostrar('duracion'); ?>" required>
+						<input type="text" name="duracion" placeholder="Duración en minutos" value="<?php echo $evento[0]['duracion']; ?>" required>
                         <div style="height: 10px;"></div>		
                         
-						<input type="text" name="descripcion" class="form-control" placeholder="Descripción" value="<?php mostrar('descripcion'); ?>" required>
+						<input type="text" name="descripcion" class="form-control" placeholder="Descripción" value="<?php echo $evento[0]['descripcion']; ?>" required>
                         <div style="height: 10px;"></div>		
                         
-						<input type="text" name="cupo" placeholder="Cupo Máximo" value="<?php mostrar('cupo_max'); ?>" required>
+						<input type="text" name="cupo" placeholder="Cupo Máximo" value="<?php echo $evento[0]['cupo_max']; ?>" required>
                         
-						<input type="text" name="precio" placeholder="Precio" value="<?php mostrar('precio'); ?>" required>
+						<input type="text" name="precio" placeholder="Precio" value="<?php echo $evento[0]['precio']; ?>" required>
                         <div style="height: 10px;"></div>
-						<?php
 						
-						mostrar_arch('archivo');
-					 
+						<?php
+						mostrarCarpeta((int)desencriptar_AES($_GET['a'],$clave));
 						?>
+                        <input type="hidden" name="id_evento" value="<?php echo desencriptar_AES($_GET['a'],$clave); ?>">
 						<div class="form-group">
 							<input type="file" name="archivo[]" class="form-control" multiple="" placeholder="Agregar archivos">
 							<div style="height: 10px;"></div>
 						</div>
 						
-						<input type="text" name="ubicacion" class="form-control" placeholder="Ubicación" value="<?php mostrar('ubicacion'); ?>" required>
-                        <div style="height: 10px;"></div>
+						<div  align="middle" > 
+							<?php
+							include('mapa_mostrar.php');
+							?>
+						</div>	
 						
-						<input type="text" name="latitud" placeholder="Latitud" value="<?php mostrar('latitud'); ?>" required>		
-                        
-						<input type="text" name="longitud" placeholder="Longitud" value="<?php mostrar('longitud'); ?>" required>
-                        <div style="height: 10px;"></div>
-											
-						<br/></br><br/><br><input type="submit" name="submit" value="Modificar Evento">
+						<input class="btn btn-primary" type="submit" name="submit" value="Modificar Evento">
 					</form>            
             </div>
         </div>

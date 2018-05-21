@@ -29,26 +29,35 @@ $inicioDate->modify('+'.$evento[0]['duracion'].' minutes');
 $diffFin = $actualDate->diff($inicioDate);
 
 if($evento[0]['email'] == $_SESSION['email']){
-    echo "Presentador";
+    echo "Presentador ";
     if($diffInicio->format('%R') == '+'){
-        echo 'Futuro';
+    header("Location: eventoFutPresentador.php?a=".$_GET['a']);
     }else{
         if($diffFin->format('%R') == '-'){
-        echo 'pasado';
+        echo ' En proceso';
+header("Location: eventoPasPresentador.php?a=".$_GET['a']);
+                      
+
         }else if($diffFin->format('%R') == '+'){
-            echo 'En Proceso';
-        }
+echo " Pasado";
+header("Location: eventoProPresentador.php?a=".$_GET['a']);
+
+}
     }
 }else{
-    echo "Asistente";
+    echo "Asistente ";
     if($diffInicio->format('%R') == '+'){
-        echo 'Futuro';
-    }else{
+     header("Location: eventoFutAsistente.php?a=".$_GET['a']);
+   
+        }else{
         if($diffFin->format('%R') == '-'){
-        echo 'pasado';
+        //echo 'pasado';
+     header("Location: eventoPasAsistente.php?a=".$_GET['a']);
+      
         }else if($diffFin->format('%R') == '+'){
-            echo 'En Proceso';
-        }
+header("Location: eventoProAsistente.php?a=".$_GET['a']);
+
+            }
     }
 }
 ?>

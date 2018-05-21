@@ -1,5 +1,7 @@
 <?php
-session_start();
+//session_start();
+header("refresh:60; url=$a_donde"); //Refrescamos cada 300 segundos
+
 
 function usuario($mostrar,$id)  {
 
@@ -73,11 +75,9 @@ $nombrebd="eventum";
     echo 'Usuario:  '. Usuario('email',$id); ?>   
 <form action="verificacionrespuesta.php" method="post" enctype="multipart/form-data">
 <?php 
-
-// 
 ?>
-    
-<textarea rows="0" cols="60"> <?php echo mensaje('texto',$campo); ?></textarea>
+  
+<textarea rows="0" cols="60" readonly="readonly"> <?php echo mensaje('texto',$campo); ?></textarea>
 <textarea name="pregunta" rows="0" cols="80" class="form" placeholder="<?php echo mensaje('respuesta',$campo); ?>" ></textarea>
 <input type="hidden" name="a_donde" value="<?php echo $a_donde ?>">
 

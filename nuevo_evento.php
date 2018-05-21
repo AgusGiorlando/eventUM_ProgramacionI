@@ -1,13 +1,18 @@
 <?php
 session_start();
+if(!$_SESSION['email']){
+    header("Location: inicio_de_sesion.html");
+}
+require 'encriptado.php';
 ?>
 <!DOCTYPE html>
-
 <html>
     <head>
         <title>EventUM</title>
         <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMtQv2rF0nW7vo-M2LmsXI68SxizTSBt8&callback=initMap"></script>
+		<script language="javascript" src="js/mapa.js"></script>
     </head>
 
     <nav>
@@ -42,9 +47,9 @@ session_start();
 						<input type="text" name="titulo" class="form-control" placeholder="Titulo" required>
                         <div style="height: 10px;"></div>                   
                         
-						<input type="datetime-local" name="fecha" class="control" placeholder="Fecha" value="aaaa-mm-dd hh:mm:ss"required>
+						<input type="datetime-local" name="fecha" class="control" placeholder="aaaa-mm-dd hh:mm" required>
                         
-						<input type="time" name="duracion" placeholder="Duración" value="duracion"required>
+						<input type="text" name="duracion" placeholder="Duración en minutos" required>
                         <div style="height: 10px;"></div>		
                         
 						<input type="text" name="descripcion" class="form-control" placeholder="Descripción" required>
@@ -60,17 +65,16 @@ session_start();
 							<div style="height: 10px;"></div>
 						</div>
 						
-						<input type="text" name="ubicacion" class="form-control" placeholder="Ubicación">
-                        <div style="height: 10px;"></div>
-						<head>
-							<link rel="import" href="m1.php">
-						</head>
-						<input type="text" name="latitud" placeholder="Latitud">		
-                        
-						<input type="text" name="longitud" placeholder="Longitud">
-                        <div style="height: 10px;"></div>
-						
-						<br/></br><br/><br><input type="submit" class="btn btn-primary" value="Crear Evento">
+						<div style="height: 500px" align="middle" > 
+							<input type="text" id="direccion" name="direccion" size="40" value="" placeholder="Direccion"/>
+							<input type="text" id="coordenadas" name="coordenadas" size="40" value="" placeholder="Coordenadas"/>
+							</br>
+							<span id="geocoding"></span>
+							</br>
+							<div id="map_canvas" style="width:70%; height:80%"></div>
+						</div>
+							
+						<input type="submit" class="btn btn-primary" value="Crear Evento">
 					</form>
 				</p>            
             </div>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+require 'encriptado.php';
 function mostrar($table,$mostrar,$id_table,$id)  {
 
 $servidor="localhost";
@@ -114,9 +115,10 @@ $nombrebd="eventum";
             
         }
         echo "</td>";
-        
-        echo "<td><a href='borrador.php?id=$id'>Borrar</a> | <a href='formularioUsuario.php?id=$id'>Modificar</a></td>";
-        
+        ?>
+                
+        <td><a href='borrador.php?id=<?php echo $id ?>'>Borrar</a> | <a href='formularioUsuario.php?id=<?php echo encriptar_AES($id,$clave) ?>'>Modificar</a></td>
+        <?php
         echo '</tr>';
     }
     echo'</form>';
@@ -129,7 +131,7 @@ $nombrebd="eventum";
       <p>Eventos Registrados</p>
  <?php  
     $nulo=0;
-    $sq2="select id_evento as ID,titulo as Titulo,inicio as Inicio,duracion as Duracion,descripcion as Descripcion,cupo_max as Cupo_Maximo,precio as Precio,presentador as ID_Presentador,archivo as ID_Archivo,asistente as ID_Asistente,pregunta as ID_Pregunta from eventos WHERE nulo=".$nulo;
+    $sq2="select id_evento as ID,titulo as Titulo,inicio as Inicio,duracion as Duracion,descripcion as Descripcion,cupo_max as Cupo_Maximo,precio as Precio,presentador as ID_Presentador,direccion as Direccion,coordenadas As Coordanadas from eventos WHERE nulo=".$nulo;
    
     $ejecutar1=$conn->prepare($sq2);
     $ejecutar1->execute();
@@ -144,9 +146,6 @@ $nombrebd="eventum";
             echo"</th>";
             $i++;
         }
-        echo"<th> ";
-        echo "Ubicacion";
-        echo"</th>";
         
         echo"<th> ";
         echo "Opciones";
@@ -162,24 +161,15 @@ $nombrebd="eventum";
         for ($index = 0; $index < count($fila); $index++) {
             if ($index == 0) {
                 $id = $fila[$index];
-            }
+            }   
             echo "<td>$fila[$index]</td>";
         }
         $ubicacion=mostrar("eventos","ubicacion","id_evento",$id);
         
         
-        echo "<td>";
-        if($ubicacion!=NULL){
-            echo "SI";
-            
-        }else {
-            echo "NO";
-            
-        }
-        echo "</td>";
-
-        echo "<td><a href='borrador_evento.php?id=$id'>Deshabilitar</a> | <a href='formularioEvento.php?id=$id'>Modificar</a></td>";
-        
+        ?>
+        <td><a href='borrador_evento.php?id=<?php echo $id ?>'>Deshabilitar</a> | <a href='formularioEvento.php?id=<?php echo encriptar_AES($id,$clave) ?>'>Modificar</a></td>
+        <?php
         
         echo '</tr>';
     }
@@ -190,7 +180,7 @@ $nombrebd="eventum";
     echo '  <br><br><p>Eventos Anulados</p>';
     
     $nulo=1;
-    $sq2="select id_evento as ID,titulo as Titulo,inicio as Inicio,duracion as Duracion,descripcion as Descripcion,cupo_max as Cupo_Maximo,precio as Precio,presentador as ID_Presentador,archivo as ID_Archivo,asistente as ID_Asistente,pregunta as ID_Pregunta from eventos WHERE nulo=".$nulo;
+    $sq2="select id_evento as ID,titulo as Titulo,inicio as Inicio,duracion as Duracion,descripcion as Descripcion,cupo_max as Cupo_Maximo,precio as Precio,presentador as ID_Presentador,direccion as Direccion,coordenadas As Coordanadas from eventos WHERE nulo=".$nulo;
    
     $ejecutar1=$conn->prepare($sq2);
     $ejecutar1->execute();
@@ -206,12 +196,9 @@ $nombrebd="eventum";
             $i++;
         }
         echo"<th> ";
-        echo "Ubicacion";
-        echo"</th>";
-        
-        echo"<th> ";
         echo "Opciones";
         echo"</th>";
+        
         
         echo"</tr>";
             
@@ -226,19 +213,7 @@ $nombrebd="eventum";
             }
             echo "<td>$fila[$index]</td>";
         }
-        $ubicacion=mostrar("eventos","ubicacion","id_evento",$id);
-        
-        
-        echo "<td>";
-        if($ubicacion!=NULL){
-            echo "SI";
-            
-        }else {
-            echo "NO";
-            
-        }
-        echo "</td>";
-
+    
         echo "<td><a href='habilitar_evento.php?id=$id'>Habiliar</a></td>";
         
         echo '</tr>';

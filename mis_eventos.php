@@ -1,11 +1,71 @@
 <?php
 session_start();
+function verificar($mostrar, $id_usuario) {
+
+    $servidor = "localhost";
+    $usuario = "root";
+    $contrasena = "";
+    $nombrebd = "eventum";
+
+    $conn = new PDO("mysql:host=$servidor;dbname=$nombrebd", $usuario, $contrasena);
+    $sql = "select $mostrar from asistencia WHERE usuario = '{$id_usuario}';";
+    $ejecutar = $conn->prepare($sql);
+    $ejecutar->execute();
+
+    while ($fila = $ejecutar->fetch(PDO::FETCH_ASSOC)) {
+
+        foreach ($fila as $campo) {
+            return $campo;
+        }
+    }
+}
+
+function presentador($mostrar) {
+
+    $servidor = "localhost";
+    $usuario = "root";
+    $contrasena = "";
+    $nombrebd = "eventum";
+
+    $conn = new PDO("mysql:host=$servidor;dbname=$nombrebd", $usuario, $contrasena);
+    $sql = "select $mostrar from eventos; ";
+    $ejecutar = $conn->prepare($sql);
+    $ejecutar->execute();
+
+    while ($fila = $ejecutar->fetch(PDO::FETCH_ASSOC)) {
+
+        foreach ($fila as $campo) {
+            return $campo;
+        }
+    }
+}
 ?>
-<!DOCTYPE html>
+
 <?php
 if (!$_SESSION['email']) {
     header("Location: inicio_de_sesion.html");
-    ;
+}
+date_default_timezone_set('America/Argentina/Buenos_Aires');
+require 'encriptado.php';
+
+function id_usuario($mostrar) {
+
+    $servidor = "localhost";
+    $usuario = "root";
+    $contrasena = "";
+    $nombrebd = "eventum";
+
+    $conn = new PDO("mysql:host=$servidor;dbname=$nombrebd", $usuario, $contrasena);
+    $sql = "select $mostrar from usuarios WHERE email = '{$_SESSION['email']}';";
+    $ejecutar = $conn->prepare($sql);
+    $ejecutar->execute();
+
+    while ($fila = $ejecutar->fetch(PDO::FETCH_ASSOC)) {
+
+        foreach ($fila as $campo) {
+            return $campo;
+        }
+    }
 }
 ?>
 <html >
@@ -71,39 +131,60 @@ if (!$_SESSION['email']) {
             <div class="row">
 
                 <h3>
-                    Tus eventos en proceso :
+                    Tus eventos hoy :
                 </h3>
-                <?php
-                $bdd = new PDO('mysql:host=localhost;dbname=eventum', 'root', '');
-                $respuesta = $bdd->query('SELECT * FROM eventos WHERE DAY(inicio) = DAY(NOW())');
-                if ($respuesta != NULL) {
-                    while ($donnees = $respuesta->fetch()) {
-                        ?>
-                        <div span style="float: left"> <h2> <?php echo '<p>' . $donnees['titulo'] . '</p>'; ?></h2></div>
-                        <div span style="float: right"> <?php echo 'Fecha: <p>' . $donnees['inicio'] . '</p>'; ?></div>
-                        <br><br><br><br>
-                        <div class="col-md-2"> <?php echo '<p>Duracion: ' . $donnees['duracion'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Descripcion: ' . $donnees['descripcion'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Ubicacion: ' . $donnees['cupo_max'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Cupo maximo: ' . $donnees['ubicacion'] . '</p>'; ?></div><br><br>
-                        <div class="col-md-2"><?php echo '<p> Precio: ' . $donnees['precio'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Presentador: ' . $donnees['presentador'] . '</p>'; ?> </div>
-                        <div class="col-md-2"><?php echo '<p> Archivo: ' . $donnees['archivo']; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Asistente: ' . $donnees['asistente'] . '</p>'; ?></div>
-                        <br><br>
-                        <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Leer mas</a>
-                        </div>
-                        <br>
-                        <br>
-                        <br> 
-                        <br>
-                        <?php
-                    }
+<?php
+$id_usuario=id_usuario('id_usuario');
+$presentador = presentador('presentador');
+$verificar = verificar('usuario', $id_usuario);
+    $servidor = "localhost";
+    $usuario = "root";
+    $contrasena = "";
+    $nombrebd = "eventum";
 
-                    $respuesta->closeCursor();
-                }
-                ?>
+    $bdd = new PDO("mysql:host=$servidor;dbname=$nombrebd", $usuario, $contrasena);
+    
+
+if ($verificar != "" || $presentador == $id_usuario) {
+    $actualDate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d h:i:s', time()));
+    $actualString = $actualDate->format('Y-m-d H:i:s');
+
+    $respuesta = $bdd->prepare("SELECT * FROM eventos WHERE DAY(inicio) = DAY(NOW()) AND eventos.nulo != 1 ORDER BY eventos.inicio");
+    $respuesta->execute();
+
+    $donnees = $respuesta->fetchAll(PDO::FETCH_ASSOC);
+    $numDonnes = $respuesta->rowCount();
+
+    for ($i = 0; $i < $numDonnes; $i++) {
+        ?>
+                        <div style="border: ridge black 2px;">
+                            <div span style="float: left"> <h2> <?php echo '<p>' . $donnees[$i]['titulo'] . '</p>'; ?></h2></div>
+                            <div span style="float: right"> <?php echo 'Fecha: <p>' . $donnees[$i]['inicio'] . '</p>'; ?></div>
+                            <br><br><br><br>
+                            <div class="col-md-2"> <?php echo '<p>Duracion: ' . $donnees[$i]['duracion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Descripcion: ' . $donnees[$i]['descripcion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Direccion: ' . $donnees[$i]['direccion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Cupo maximo: ' . $donnees[$i]['cupo_max'] . '</p>'; ?></div><br><br>
+                            <div class="col-md-2"><?php echo '<p> Precio: ' . $donnees[$i]['precio'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Presentador: ' . $donnees[$i]['presentador'] . '</p>'; ?> </div>
+                            <div class="col-sm-4" style="background-color:white;"> 
+                                <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($donnees[$i]['id_evento'], $clave) ?>">Ver</a>
+                            </div>
+
+
+                            <br><br><br>
+                            <br>
+                            <br>
+                        </div>                 
+                        <br>
+                        <br>
+
+    <?php
+    }
+
+    $respuesta->closeCursor();
+}
+?>
                 <br>
                 <br>
             </div>
@@ -114,36 +195,47 @@ if (!$_SESSION['email']) {
                 <h3>
                     Tus eventos en futuro :
                 </h3> 
-                <?php
-                $respuesta = $bdd->query('SELECT * FROM eventos WHERE inicio > NOW()');
-                if ($respuesta != NULL) {
-                    while ($donnees = $respuesta->fetch()) {
-                        ?>
-                        <div span style="float: left"> <h2> <?php echo '<p>' . $donnees['titulo'] . '</p>'; ?></h2></div>
-                        <div span style="float: right"> <?php echo 'Fecha: <p>' . $donnees['inicio'] . '</p>'; ?></div>
-                        <br><br><br><br>
-                        <div class="col-md-2"> <?php echo '<p>Duracion: ' . $donnees['duracion'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Descripcion: ' . $donnees['descripcion'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Ubicacion: ' . $donnees['cupo_max'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Cupo maximo: ' . $donnees['ubicacion'] . '</p>'; ?></div><br><br>
-                        <div class="col-md-2"><?php echo '<p> Precio: ' . $donnees['precio'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Presentador: ' . $donnees['presentador'] . '</p>'; ?> </div>
-                        <div class="col-md-2"><?php echo '<p> Archivo: ' . $donnees['archivo']; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Asistente: ' . $donnees['asistente'] . '</p>'; ?></div>
-                        <br><br>
-                        <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Leer mas</a>
-                        </div>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <?php
-                    }
+<?php
+if ($verificar != "" || $presentador == $id_usuario) {
+    $actualDate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d h:i:s', time()));
+    $actualString = $actualDate->format('Y-m-d H:i:s');
 
-                    $respuesta->closeCursor();
-                }
-                ?>
+    $respuesta = $bdd->prepare("SELECT * FROM eventos WHERE eventos.inicio > '" . $actualString . "' AND eventos.nulo != 1 ORDER BY eventos.inicio");
+    $respuesta->execute();
+
+    $donnees = $respuesta->fetchAll(PDO::FETCH_ASSOC);
+    $numDonnes = $respuesta->rowCount();
+
+    for ($i = 0; $i < $numDonnes; $i++) {
+        ?>
+                        <div style="border: ridge black 2px;">
+                            <div span style="float: left"> <h2> <?php echo '<p>' . $donnees[$i]['titulo'] . '</p>'; ?></h2></div>
+                            <div span style="float: right"> <?php echo 'Fecha: <p>' . $donnees[$i]['inicio'] . '</p>'; ?></div>
+                            <br><br><br><br>
+                            <div class="col-md-2"> <?php echo '<p>Duracion: ' . $donnees[$i]['duracion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Descripcion: ' . $donnees[$i]['descripcion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Direccion: ' . $donnees[$i]['direccion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Cupo maximo: ' . $donnees[$i]['cupo_max'] . '</p>'; ?></div><br><br>
+                            <div class="col-md-2"><?php echo '<p> Precio: ' . $donnees[$i]['precio'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Presentador: ' . $donnees[$i]['presentador'] . '</p>'; ?> </div>
+                            <div class="col-sm-4" style="background-color:white;"> 
+                                <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($donnees[$i]['id_evento'], $clave) ?>">Ver</a>
+                            </div>
+
+
+                            <br><br><br>
+                            <br>
+                            <br>
+                        </div>                 
+                        <br>
+                        <br>
+
+        <?php
+    }
+
+    $respuesta->closeCursor();
+}
+?>
                 <br>
                 <br>
             </div>
@@ -153,36 +245,48 @@ if (!$_SESSION['email']) {
                 <h3>
                     Tus eventos pasados :
                 </h3>
-                <?php
-                $respuesta = $bdd->query('SELECT * FROM eventos WHERE DAY(inicio) < DAY(NOW())');
-                if ($respuesta != NULL) {
-                    while ($donnees = $respuesta->fetch()) {
-                        ?>
-                        <div span style="float: left"> <h2> <?php echo '<p>' . $donnees['titulo'] . '</p>'; ?></h2></div>
-                        <div span style="float: right"> <?php echo 'Fecha: <p>' . $donnees['inicio'] . '</p>'; ?></div>
-                        <br><br><br><br>
-                        <div class="col-md-2"> <?php echo '<p>Duracion: ' . $donnees['duracion'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Descripcion: ' . $donnees['descripcion'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Ubicacion: ' . $donnees['cupo_max'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Cupo maximo: ' . $donnees['ubicacion'] . '</p>'; ?></div><br><br>
-                        <div class="col-md-2"><?php echo '<p> Precio: ' . $donnees['precio'] . '</p>'; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Presentador: ' . $donnees['presentador'] . '</p>'; ?> </div>
-                        <div class="col-md-2"><?php echo '<p> Archivo: ' . $donnees['archivo']; ?></div>
-                        <div class="col-md-2"><?php echo '<p> Asistente: ' . $donnees['asistente'] . '</p>'; ?></div>
-                        <br><br>
-                        <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Leer mas</a>
-                        </div>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <?php
-                    }
+<?php
+if ($verificar != "" || $presentador == $id_usuario) {
+    $actualDate = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d h:i:s', time()));
+    $actualString = $actualDate->format('Y-m-d H:i:s');
 
-                    $respuesta->closeCursor();
-                }
-                ?>
+    $respuesta = $bdd->prepare("SELECT * FROM eventos WHERE eventos.inicio < '" . $actualString . "' AND eventos.nulo != 1 ORDER BY eventos.inicio");
+    $respuesta->execute();
+
+    $donnees = $respuesta->fetchAll(PDO::FETCH_ASSOC);
+    $numDonnes = $respuesta->rowCount();
+
+    for ($i = 0; $i < $numDonnes; $i++) {
+        ?>
+                        <div style="border: ridge black 2px;">
+                            <div span style="float: left"> <h2> <?php echo '<p>' . $donnees[$i]['titulo'] . '</p>'; ?></h2></div>
+                            <div span style="float: right"> <?php echo 'Fecha: <p>' . $donnees[$i]['inicio'] . '</p>'; ?></div>
+                            <br><br><br><br>
+                            <div class="col-md-2"> <?php echo '<p>Duracion: ' . $donnees[$i]['duracion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Descripcion: ' . $donnees[$i]['descripcion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Direccion: ' . $donnees[$i]['direccion'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Cupo maximo: ' . $donnees[$i]['cupo_max'] . '</p>'; ?></div><br><br>
+                            <div class="col-md-2"><?php echo '<p> Precio: ' . $donnees[$i]['precio'] . '</p>'; ?></div>
+                            <div class="col-md-2"><?php echo '<p> Presentador: ' . $donnees[$i]['presentador'] . '</p>'; ?> </div>
+                            <div class="col-sm-4" style="background-color:white;"> 
+                                <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($donnees[$i]['id_evento'], $clave) ?>">Ver</a>
+                            </div>
+
+
+                            <br><br><br>
+                            <br>
+                            <br>
+                        </div>                 
+                        <br>
+                        <br>
+
+        <?php
+    }
+
+    $respuesta->closeCursor();
+}
+?>
+
                 <br>
                 <br>
             </div>

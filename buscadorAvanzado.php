@@ -4,6 +4,65 @@ if(!$_SESSION['email']){
     header("Location: inicio_de_sesion.html");
 }
 require 'encriptado.php';
+
+function verificar($mostrar, $id_usuario) {
+
+    $servidor = "localhost";
+    $usuario = "root";
+    $contrasena = "";
+    $nombrebd = "eventum";
+
+    $conn = new PDO("mysql:host=$servidor;dbname=$nombrebd", $usuario, $contrasena);
+    $sql = "select $mostrar from asistencia WHERE usuario = '{$id_usuario}'; ";
+    $ejecutar = $conn->prepare($sql);
+    $ejecutar->execute();
+
+    while ($fila = $ejecutar->fetch(PDO::FETCH_ASSOC)) {
+
+        foreach ($fila as $campo) {
+            return $campo;
+        }
+    }
+}
+function presentador($mostrar) {
+
+    $servidor = "localhost";
+    $usuario = "root";
+    $contrasena = "";
+    $nombrebd = "eventum";
+
+    $conn = new PDO("mysql:host=$servidor;dbname=$nombrebd", $usuario, $contrasena);
+    $sql = "select $mostrar from eventos; ";
+    $ejecutar = $conn->prepare($sql);
+    $ejecutar->execute();
+
+    while ($fila = $ejecutar->fetch(PDO::FETCH_ASSOC)) {
+
+        foreach ($fila as $campo) {
+            return $campo;
+        }
+    }
+}
+
+function mostrar($mostrar) {
+
+    $servidor = "localhost";
+    $usuario = "root";
+    $contrasena = "";
+    $nombrebd = "eventum";
+
+    $conn = new PDO("mysql:host=$servidor;dbname=$nombrebd", $usuario, $contrasena);
+    $sql = "select $mostrar from usuarios WHERE email = '{$_SESSION['email']}';";
+    $ejecutar = $conn->prepare($sql);
+    $ejecutar->execute();
+
+    while ($fila = $ejecutar->fetch(PDO::FETCH_ASSOC)) {
+
+        foreach ($fila as $campo) {
+            return $campo;
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -130,7 +189,7 @@ require 'encriptado.php';
                                      
                     $conexion = new PDO("mysql:host=$servidor;port=3306;dbname=$bd;charset=utf8","root","");
 
-                    $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, ubicacion, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE 1 AND eventos.presentador = usuarios.id_usuario ";
+                    $sql = "SELECT id_evento, titulo, inicio, duracion, precio, descripcion, direccion, coordenadas, usuarios.nombre, usuarios.apellido FROM eventos, usuarios WHERE 1 AND eventos.presentador = usuarios.id_usuario ";
 
                     if (isset($_POST['titulo'])) {
                         $sql .= "AND titulo LIKE '%".$_POST['titulo']."%' ";
@@ -184,7 +243,7 @@ require 'encriptado.php';
                     </div>
                     <div class="panel-body" style="background-color:white;padding:10px">
                         <div class="col-sm-6" style="background-color:white;">    
-                            <h5 style="color:black" align="left">Ubicacion: <?php echo $eventos[$i]['ubicacion'] ?></h5>
+                            <h5 style="color:black" align="left">Direccion: <?php echo $eventos[$i]['direccion'] ?></h5>
                         </div>
                         <div class="col-sm-6" style="background-color:white;">    
                             <h5 style="color:black" align="left">Precio: <?php echo $eventos[$i]['precio'] ?></h5>
@@ -197,14 +256,30 @@ require 'encriptado.php';
                         <div class="col-sm-4" style="background-color:white;">    
                             <a class="btn btn-primary" href="controladorEventos.php?a=<?php echo encriptar_AES($eventos[$i]['id_evento'],$clave) ?>">Leer mas</a>
                         </div>
-                        <div class="col-sm-4" style="background-color:white;">    
-                            <a class="btn btn-primary" href="">Asistir</a>
+   <?php
+    $id_usuario = mostrar('id_usuario');
+    $verificar = verificar('usuario', $id_usuario);
+    $presentador = presentador('presentador');
+    if ($verificar == "" && $presentador != $id_usuario) {
+        
+        ?>
+                                <div class="col-sm-4" style="background-color:white;">    
+                                    <a class="btn btn-primary" href="controladorAsistir.php?id_evento=<?php echo $eventos[$i]['id_evento']; ?>">Asistir</a>
+                                </div>
+                                <?php
+                            }
+                            ?>
                         </div>
                     </div>
-                </div>
+                    <!--EVENTO-->
+                            <?php
+                        }
+    
+                        ?>
+                     
+                
                 <!--EVENTO-->
-                <?php
-                }
+                <?php                
                 ?>
             </div>
         </div>

@@ -1,7 +1,10 @@
 <?php
 
 session_start();
-function mostrar($mostrar)  {
+require 'encriptado.php';
+$id=desencriptar_AES($_GET['id'],$clave);
+
+function mostrar($mostrar,$id)  {
 
 $servidor="localhost";
 $usuario="root";
@@ -9,7 +12,7 @@ $contrasena="";
 $nombrebd="eventum";
 
     $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
-    $sql="select $mostrar from usuarios WHERE id_usuario = '{$_GET['id']}';";
+    $sql="select $mostrar from usuarios WHERE id_usuario = '{$id}';";
     $ejecutar=$conn->prepare($sql);
     $ejecutar->execute();
     
@@ -23,7 +26,7 @@ echo $campo;
                     }
                     ?>
 <?php
-function mostrarimagen(){
+function mostrarimagen($id){
 $servidor="localhost";
 $usuario="root";
 $contrasena="";
@@ -31,7 +34,7 @@ $nombrebd="eventum";
 
 $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-$sql="select foto from usuarios WHERE id_usuario = '{$_GET['id']}';";
+$sql="select foto from usuarios WHERE id_usuario = '{$id}';";
 $resultado=$conn->query($sql);
 while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
        
@@ -93,17 +96,17 @@ while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
                  
  <h2> Modificar </h2>
                 
-               <?php mostrarimagen();?> 
+               <?php mostrarimagen($id);?> 
  <form action="modificarUsuario.php" method="post" name="nvaClave" enctype="multipart/form-data">
                 
                 <label for="texto" >Nombre: </label> 		
-                <input type="text" name="nombre" class="form-control" value="<?php mostrar("nombre"); ?>"> <br>
+                <input type="text" name="nombre" class="form-control" value="<?php mostrar("nombre",$id); ?>"> <br>
                 <label for="texto" >Apellido: </label> 		
-                <input type="text" name="apellido" class="form-control" value="<?php mostrar("apellido"); ?>"> <br>
+                <input type="text" name="apellido" class="form-control" value="<?php mostrar("apellido",$id); ?>"> <br>
                 <label for="texto" >E-mail: </label> 		
-                <input type="text" name="email" class="form-control" value="<?php mostrar("email"); ?>"> <br>
+                <input type="text" name="email" class="form-control" value="<?php mostrar("email",$id); ?>"> <br>
                 <label for="texto" >Fecha de Nacimiento: </label> 		
-                <input type="data" name="fecha" class="form-control" value="<?php mostrar("fecha_nacimiento"); ?>"> <br>
+                <input type="data" name="fecha" class="form-control" value="<?php mostrar("fecha_nacimiento",$id); ?>"> <br>
                 Foto: <input type="file" name="archivo" class="form-control" placeholder="Ingresa tu Foto" >
 		<div style="height: 10px;"></div>		
                 
@@ -115,9 +118,9 @@ while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
                 
                  		
                 <label for="texto" >Curriculum: </label> 		
-                <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+                <input type="hidden" name="id" value="<?php echo $id ?>">
 
-                <textarea name="curriculum" rows="10" cols="40" class="form-control" placeholder="<?php mostrar("curriculum"); ?>" required></textarea>   
+                <textarea name="curriculum" rows="10" cols="40" class="form-control" placeholder="<?php mostrar("curriculum",$id); ?>" required></textarea>   
                 <button type="submit" class="btn btn-primary" onClick="comprobarClave()">Actualizar</button>
                 
 </form>

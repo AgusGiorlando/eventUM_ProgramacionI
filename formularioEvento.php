@@ -22,7 +22,7 @@ $nombrebd="eventum";
                     }
 
 
-function mostrar($mostrar)  {
+function mostrar($mostrar,$id)  {
 
 $servidor="localhost";
 $usuario="root";
@@ -30,7 +30,7 @@ $contrasena="";
 $nombrebd="eventum";
 
     $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
-    $sql="select $mostrar from eventos WHERE id_evento = '{$_GET['id']}';";
+    $sql="select $mostrar from eventos WHERE id_evento = '{$id}';";
     $ejecutar=$conn->prepare($sql);
     $ejecutar->execute();
     
@@ -72,29 +72,36 @@ echo $campo;
                     Modificar Evento               
                 </h1>
                 <p>
-<?php //--------------------------------------------------------------------------------------------------------------------------------------------- ?>                   
+<?php 
+require 'encriptado.php';
+$id=desencriptar_AES($_GET['id'],$clave);
+//--------------------------------------------------------------------------------------------------------------------------------------------- ?>                   
                 <form action="modificarEvento_adm.php" method="post"  enctype="multipart/form-data">
                 
                 <label for="texto" >Titulo: </label> 		
-                <input type="text" name="titulo" class="form-control" value="<?php mostrar('titulo'); ?>"> <br>
+                <input type="text" name="titulo" class="form-control" value="<?php mostrar('titulo',$id); ?>"> <br>
                 <label for="texto" >Inicio: </label> 		
-                <input type="data" name="fecha" class="control" value="<?php mostrar('inicio'); ?>">    
+                <input type="data" name="fecha" class="control" value="<?php mostrar('inicio',$id); ?>">    
                 <label for="texto" >Duración: </label> 		
-                <input type="data" name="duracion" placeholder="Duración" value="<?php mostrar('duracion'); ?>"> <br><br>  
+                <input type="data" name="duracion" placeholder="Duración" value="<?php mostrar('duracion',$id); ?>"> <br><br>  
                 <label for="texto" >Descripción: </label> 		
-                <input type="text" name="descripcion" class="form-control" value="<?php mostrar('descripcion'); ?>" > <br>
+                <input type="text" name="descripcion" class="form-control" value="<?php mostrar('descripcion',$id); ?>" > <br>
                 <label for="texto" >Cupo Maximo:     </label> 		
-                <input type="text" name="cupo" class="control" value="<?php mostrar('cupo_max'); ?>">    
+                <input type="text" name="cupo" class="control" value="<?php mostrar('cupo_max',$id); ?>">    
                 <label for="texto" >Precio: </label> 		
-                <input type="text" name="precio"  class="control" value="<?php mostrar('precio'); ?>"> <br>
-                <div class="form-group"> <br>
+                <input type="text" name="precio"  class="control" value="<?php mostrar('precio',$id); ?>"> <br><br>
+                <label for="texto" >Direccion: </label> 		
+                <input type="data" name="duracion_nom" class="form-control" placeholder="Duración" value="<?php mostrar('direccion',$id); ?>">   
+                
+                <!--                <div class="form-group"> <br>
+                    
 	        <label for="texto" >Archivo: </label> 		
-                <input type="file" name="archivo[]" class="form-control" multiple="" placeholder="Agregar archivos">
+               <input type="file" name="archivo[]" class="form-control" multiple="" placeholder="Agregar archivos">
 		<div style="height: 10px;"></div>
 		</div>
-<!--       <label for="texto" >Ubicacion: </label> 
+       <label for="texto" >Ubicacion: </label> 
         
-        <?php $ubicacion=mostrar1("eventos","ubicacion","id_evento",$_GET['id']);
+        <?php $ubicacion=mostrar1("eventos","ubicacion","id_evento",$id);
         
         if($ubicacion!=NULL){
         echo "SI";
@@ -104,18 +111,21 @@ echo $campo;
         echo "NO";
             
         }
-              ?>  
+        ?>  
                 
       -->          
                 <div style="height: 10px;"></div>
 	                <div style="height: 10px;"></div>               
-                <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+               <input type="hidden" name="id" value="<?php echo $id ?>">
 
                 <button type="submit" class="btn btn-primary" >Actualizar</button>
                 
 </form>                
-<?php //include 'maps.php';
-//--------------------------------------------------------------------------------------------------------------------------------------------- ?>                   
+<?php 
+        
+
+?>                   
+                
                         	</p>            
             </div>
         </div>
