@@ -1,76 +1,63 @@
 <!DOCTYPE html>
-<html >
-  
+<html>
 
 <head>
-    
     <title>EventUM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    
+</head>
+<nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <img class="img-responsive" src="img/logo.png">
+            </div>
+        </div>
+    </div>
+</nav>
+<header>
+    <div class="container">
+        <div class="text-center row">
+            <h1>Descripcion: </h1>
+            <p>
+                Â¡DescubrÃ­ eventos y creÃ¡ los tuyos!
+Una forma fÃ¡cil de encontrar eventos que te interesen, 
+conocer toda la informacion y ser parte de ellos.
+AdemÃ¡s, puedes crear tus propios eventos, con solo 
+crearte una cuenta en EventUm.
+Â¿QuÃ© esperas? Â¡Ãšnete!
+                
+            </p><br>
 
-    </head>
-
-    <nav>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2">
-                    <img class="img-responsive" src="img/logo.png" >
+            <h2>INICIAR SESION</h2>
+            <form action="iniciarSesion.php" method="post" id="form">
+                E-mail: <input type="text" name="email" class="form-control" required>
+                <div style="height: 10px;"></div>
+                Contrase&ntildea: <input type="password" name="password" class="form-control" required>
+                <div style="height: 10px;"></div>
+                <button type="submit" class="btn btn-primary"> Entrar</button>
+            </form>
+            <a href="recuperarClave.php">Has olvidado tu contrase&ntildea?</a>
+            <h1>Todavia no estas registrado?
+                <div class="we-do">
+                    <div class="container">
+                        <div class="text-center row">
+                            <a class="btn" href="registrarse.php">Registrarse</a>
+                        </div>
+                    </div>
                 </div>
-                
-            </div>
-            
+            </h1>
         </div>
-    </nav>
-    <header>
-        
-        
-    
-   <div class="container">
-            <div class="text-center row">
-                <h1>
-                Descripcion:
-                <br><br><br><br>
-                </h1>
-	        <p></p>
-                 
- <h2>INICIAR SESION</h2>
- <form action="verificacion.php" method="post" id="form">
-                E-mail: <input type="text" name="email" class="form-control" placeholder="Ingresa tu E-mail" required>
-		<div style="height: 10px;"></div>		
-		Contraseña: <input type="password" name="password" class="form-control" placeholder="Ingresa tu contraseña" required> 
-		<div style="height: 10px;"></div>
-		<button type="submit" class="btn btn-primary"> Entrar</button>
-</form>
-                <a href="recuperarClave.php">¿Has olvidado tu contraseña?</a>
-                <h1>
-                 ¿Todavia no estas registrado?
-    <div class="we-do">
-        <div class="container">
-            <div class="text-center row">
-    
-                 <a  class="btn" href="registrarse.php">Registrarse</a>
-          </div>
-        </div>
-    </div>     
-                 </h1>
-                
-            </div>
-        </div>
-    </header>
+    </div>
+</header>
 <footer>
-        <div class="container">
-            <div class="text-center row">
-                
-                Gracias por visitar la pagina
-                <br>    
-
-            </div>
+    <div class="container">
+        <div class="text-center row">
+            Gracias por visitar la pagina<br>
         </div>
-    </footer>
-    
+    </div>
+</footer>
 </body>
 
-
 </html>
-

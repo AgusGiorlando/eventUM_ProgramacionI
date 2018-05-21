@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Verificacion</title>
 </head>
 <body>
     <?php
-    //echo $_POST['email'];
-
     //VERIFICACION DE USUARIO
     $servidor = "localhost";
     $bd = "eventum";
@@ -24,29 +22,33 @@
 
     if(isset($usuario[0])){
         //GENERACION DE LINK
-        $link = "formularioClave.php?id=". $usuario[0]['id_usuario'];
-        echo '<a href="' . $link . '">Cambiar Contraseña</a>'; 
-    /*
+        require 'encriptado.php';
+        
+        $link = "http://localhost/programacionI/EventUM_ProgramacionI/formularioClave.php?a=". encriptar_AES($usuario[0]['id_usuario'],$clave);
         //EMAIL
-        //Parametros
-        $mensaje = "Linea 1\r\nLinea 2\r\nLinea3\r\n";
-        $asunto = "Prueba de recuperacion de clave";
-        $destino = "";
-    
-        //Cabeceras
-        $cabecera = "MIME-Version: 1.0\r\n";
-        $cabecera .= "Content-type: text/html; charset=iso-8859-1\r\n";
-        $cabecera .= "From: ";
+        
+error_reporting(E_STRICT);
+require_once('class.phpmailer.php');
+include('class.smtp.php');
+	
+	$mail = new PHPMailer();
+    $mail->SMTPSecure = 'tls';
+    $mail->Username = "proyecto2018_programacion@hotmail.com";
+    $mail->Password = "Proyecto2018";
+    $mail->AddAddress($_POST['email']);
+    $mail->FromName = "Correo gmail";
+    $mail->Subject = "Registro";
+    $mail->Body = $link;
+    $mail->Host = "smtp.live.com";
+    $mail->Port = 587;
+    $mail->IsSMTP();
+    $mail->SMTPAuth = true;
+    $mail->From = $mail->Username;
+    $mail->Send();
 
-        //Envio
-        if(mail($destino,$asunto,$mensaje,$cabecera)){
-            echo "<h1>Mensaje enviado</h1>";
-        }else{
-            echo "<h1>Mensaje no enviado</h1>";
-        }
-    */
+include('mensajeVerificarmail.php');
     }else{
-        echo "Email no encontrado";
+        echo "No se encontro la direccion de email";
     }
     ?>    
 </body>

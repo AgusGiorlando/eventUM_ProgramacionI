@@ -1,5 +1,4 @@
 <?php
-session_start();
 function mostrar($mostrar)  {
 
 $servidor="localhost";
@@ -8,7 +7,7 @@ $contrasena="";
 $nombrebd="eventum";
 
     $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
-    $sql="select $mostrar from usuarios WHERE email = '{$_SESSION['email']}';";
+    $sql="select $mostrar from usuarios WHERE id_usuario = '{$_POST['id']}';";
     $ejecutar=$conn->prepare($sql);
     $ejecutar->execute();
     
@@ -31,7 +30,7 @@ $nombrebd="eventum";
 
 $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-$sql="select foto from usuarios WHERE email = '{$_SESSION['email']}';";
+$sql="select foto from usuarios WHERE id_usuario = '{$_POST['id']}';";
 $resultado=$conn->query($sql);
 while ($fila = $resultado->fetch(PDO::FETCH_ASSOC)) {
        
@@ -61,7 +60,7 @@ $nombrebd="eventum";
   
 
     $conn=new PDO("mysql:host=$servidor;dbname=$nombrebd",$usuario,$contrasena);
-    $sq2="select id_usuario from usuarios WHERE email = '{$_SESSION['email']}';";
+    $sq2="select id_usuario from usuarios WHERE id_usuario = '{$_POST['id']}';";
     $ejecutar=$conn->prepare($sq2);
     $ejecutar->execute();
     
@@ -120,9 +119,7 @@ $sql = "UPDATE usuarios SET nombre='". $_POST['nombre'] ."', apellido='". $_POST
 $ejecucion = $conn->prepare($sql);
 $ejecucion->execute();
 
-$user=$_POST['email'];    
-$_SESSION['email']=$user;    
-header("Location: perfil.php");    
+header("Location: administrador.php");    
         
     ?>
 </body>

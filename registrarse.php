@@ -1,28 +1,11 @@
 <!DOCTYPE html>
-<html >
-  
-
+<html>
 <head>
-    
     <title>EventUM</title>
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
-    <script>
-        function comprobarClave(){
-        contraseña1 = document.nvaClave.contraseña.value
-        contraseña2 = document.nvaClave.c_contraseña.value
-        
-        if (contraseña1 == contraseña2)
-            document.nvaClave.submit()
-        else
-            alert("Las contraseñas no coinciden")
-            document.nvaClave.reset()
-        } 
-        
-    </script>
-
+    <script language = "javascript" src="js/validacion.js"></script>
     </head>
-
     <nav>
         <div class="container">
             <div class="row">
@@ -35,53 +18,35 @@
         </div>
     </nav>
     <header>
-        
-        
-    
-   <div class="container">
-            <div class="text-center row">
-                 
- <h2>Registrarse</h2>
- <form action="almacenar.php" method="post" name="nvaClave" enctype="multipart/form-data">
-                Nombre: <input type="text" name="nombre" class="form-control" placeholder="Ingresa tu nombre" required>
-		<div style="height: 10px;"></div>                   
-		Apellido: <input type="text" name="apellido" class="form-control" placeholder="Ingresa tu apellido" required>
-		<div style="height: 10px;"></div>		
-		E-mail: <input type="text" name="email" class="form-control" placeholder="Ingresa tu E-imail" required>
-		<div style="height: 10px;"></div>		
-		Fecha de Nacimiento: <input type="date" name="fecha" class="form-control" placeholder="Ingresa tu fecha de nacimiento" required>
-		<div style="height: 10px;"></div>		
-                Foto: <input type="file" name="archivo" class="form-control" placeholder="Ingresa tu Foto" required>
-		<div style="height: 10px;"></div>		
-                Contraseña: <input type="password" name="contraseña" class="form-control" placeholder="Ingresa tu contraseña" required>
-		<div style="height: 10px;"></div>		
-		Confirmar contraseña: <input type="password" name="c_contraseña" class="form-control" placeholder="Confirmacion contraseña" required> 
-		<div style="height: 10px;"></div>
-		Curriculum: <textarea name="curriculum" rows="10" cols="40" class="form-control" placeholder="Ingresar datos del Curriculum" required></textarea>
-                <div style="height: 10px;"></div>
-                <button type="submit" class="btn btn-primary" onClick="comprobarClave()">Crear</button>
-                
-</form>
-                
-                
-                
+        <div class="container">
+            <div class="text-center row">  
+                <h2>Registrarse</h2>
+                <form action="agregarUsuario.php" method="post" name="nvaClave" onSubmit="return validar();" enctype="multipart/form-data">
+                    Nombre: <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ingresa tu nombre" required>
+		            <div style="height: 10px;"></div>                   
+		            Apellido: <input type="text" name="apellido" id="apellido" class="form-control" placeholder="Ingresa tu apellido" required>
+		            <div style="height: 10px;"></div>		
+		            E-mail: <input type="text" name="email" id="email" class="form-control" placeholder="Ingresa tu E-imail" required>
+		            <div style="height: 10px;"></div>		
+                    Contraseña: <input type="password" name="contraseña" id="contrasena" class="form-control" placeholder="Ingresa tu contraseña" required>
+		            <div style="height: 10px;"></div>		
+		            Confirmar contraseña: <input type="password" name="c_contraseña" id="c_contrasena" class="form-control" placeholder="Confirmacion contraseña" required> 
+		            <div style="height: 10px;"></div>
+                    <button type="submit" class="btn btn-primary">Crear cuenta</button>
+                </form>
             </div>
         </div>
+        <br><br><br>
     </header>
-<footer>
+    <footer>
         <div class="container">
             <div class="text-center row">
-                
                 Gracias por visitar la pagina
-                <br>    
-
+                <br>   
             </div>
         </div>
     </footer>
-    
 </body>
-
-
 </html>
 
 	
